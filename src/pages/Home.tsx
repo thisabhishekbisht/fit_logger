@@ -1,7 +1,13 @@
-import React from 'react';
+
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const Home: React.FC = () => {
+    useEffect(() => {
+    document.title = 'Fitness Tracker';
+  }, []);
+  const navigate = useNavigate();
   return (
     <div style={styles.container}>
       <motion.h1
@@ -21,7 +27,6 @@ const Home: React.FC = () => {
       >
         Track your daily fitness activities easily!
       </motion.p>
-
       <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
@@ -29,6 +34,7 @@ const Home: React.FC = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 0.4 }}
         style={styles.button}
+        onClick={() => navigate('/log')}
       >
         + Add Activity
       </motion.button>
