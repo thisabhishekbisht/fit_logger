@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import styles from './AddActivity.module.css'; // 💡 import the CSS module
 
 type Activity = {
   name: string;
@@ -29,13 +30,13 @@ const AddActivity: React.FC<Props> = ({ onAdd }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={styles.form}>
+    <form onSubmit={handleSubmit} className={styles.form}>
       <input
         type="text"
         placeholder="Activity (e.g., Running)"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        style={styles.input}
+        className={styles.input}
         required
       />
       <input
@@ -43,59 +44,24 @@ const AddActivity: React.FC<Props> = ({ onAdd }) => {
         placeholder="Duration (minutes)"
         value={duration}
         onChange={(e) => setDuration(Number(e.target.value))}
-        style={styles.input}
+        className={styles.input}
         required
       />
       <input
         type="date"
         value={date}
         onChange={(e) => setDate(e.target.value)}
-        style={styles.input}
+        className={styles.input}
       />
       <textarea
         placeholder="Notes (optional)"
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
-        style={styles.textarea}
+        className={styles.textarea}
       />
-      <button type="submit" style={styles.button}>Add Activity</button>
+      <button type="submit" className={styles.button}>Add Activity</button>
     </form>
   );
-};
-const styles = {
-  form: {
-    display: 'flex',
-    flexDirection: 'column' as const,
-    gap: '1rem',
-    width: '100%',
-    maxWidth: '500px',
-    backgroundColor: '#fff',
-    padding: '1.5rem',
-    borderRadius: '8px',
-    boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
-  },
-  input: {
-    padding: '0.8rem',
-    fontSize: '1rem',
-    borderRadius: '6px',
-    border: '1px solid #ccc',
-  },
-  textarea: {
-    padding: '0.8rem',
-    fontSize: '1rem',
-    borderRadius: '6px',
-    border: '1px solid #ccc',
-    resize: 'vertical' as const,
-  },
-  button: {
-    padding: '0.8rem',
-    fontSize: '1rem',
-    borderRadius: '6px',
-    border: 'none',
-    backgroundColor: '#4CAF50',
-    color: 'white',
-    cursor: 'pointer',
-  },
 };
 
 export default AddActivity;
