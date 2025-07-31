@@ -2,8 +2,8 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
-import Home from './pages/Home';
-import ActivityLogger from './pages/ActivityLogger';
+import Home from './pages/Home/Home';
+import ActivityLogger from './pages/Logger/ActivityLogger';
 
 const App: React.FC = () => {
   return (

@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import styles from './Home.module.css';
 
 const Home: React.FC = () => {
     useEffect(() => {
@@ -9,12 +10,12 @@ const Home: React.FC = () => {
   }, []);
   const navigate = useNavigate();
   return (
-    <div style={styles.container}>
+    <div className={styles.container}>
       <motion.h1
         initial={{ opacity: 0, y: -40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        style={styles.heading}
+        className={styles.heading}
       >
         🏋️ Welcome to FitTrack
       </motion.h1>
@@ -23,7 +24,7 @@ const Home: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 0.2 }}
-        style={styles.subtext}
+        className={styles.subtext}
       >
         Track your daily fitness activities easily!
       </motion.p>
@@ -33,47 +34,13 @@ const Home: React.FC = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 0.4 }}
-        style={styles.button}
+        className={styles.button}
         onClick={() => navigate('/log')}
       >
         + Add Activity
       </motion.button>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column' as const,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '100vh',
-    background: '#f7f7f7',
-    padding: '1rem',
-  },
-  heading: {
-    fontSize: '2.5rem',
-    fontWeight: 700,
-    marginBottom: '1rem',
-    color: '#2c3e50',
-  },
-  subtext: {
-    fontSize: '1.2rem',
-    color: '#555',
-    marginBottom: '2rem',
-  },
-  button: {
-    fontSize: '1rem',
-    padding: '0.8rem 1.4rem',
-    backgroundColor: '#4CAF50',
-    color: 'white',
-    border: 'none',
-    borderRadius: '10px',
-    cursor: 'pointer',
-    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
-    transition: 'all 0.3s ease-in-out',
-  },
 };
 
 export default Home;

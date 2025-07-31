@@ -86,7 +86,8 @@ const [activities, setActivities] = useState<Activity[]>(() => {
         />
 
         <textarea
-          className={{ ...styles.input, height: '60px' }}
+          className={styles.input}
+          style={{ height: '60px' }}
           placeholder="Notes (optional)"
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
