@@ -20,13 +20,14 @@ describe('ActivityLogger', () => {
     await user.type(screen.getByPlaceholderText(/duration/i), '45');
     await user.click(screen.getByRole('button', { name: /log activity/i }));
 
-    expect(screen.getByText(/cycling/i)).toBeInTheDocument();
+    // match the activity title heading (not select option)
+    expect(screen.getByRole('heading', { name: /cycling/i })).toBeInTheDocument();
     expect(screen.getByText(/45 mins/i)).toBeInTheDocument();
 
     // delete (use title attribute as accessible text is emoji)
     const deleteBtn = screen.getByTitle(/delete activity/i);
     await user.click(deleteBtn);
 
-    expect(screen.queryByText(/cycling/i)).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: /cycling/i })).not.toBeInTheDocument();
   });
 });

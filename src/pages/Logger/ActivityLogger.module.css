@@ -56,6 +56,49 @@
   border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
+/* Inputs used in filter/toolbar */
+.input {
+  padding: 0.6rem 0.8rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+}
+
+/* Themed toolbar buttons (Undo, Export, etc.) */
+.toolbarButton {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: 1px solid rgba(255,255,255,0.28);
+  color: #fff;
+  border-radius: 12px;
+  padding: 0.5rem 0.9rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+}
+.toolbarButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(102, 126, 234, 0.4);
+}
+.toolbarButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Hide file input, style label as button */
+.fileInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .heading {
   margin: 0 0 1.5rem 0;
   font-size: 1.75rem;

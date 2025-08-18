@@ -5,4 +5,11 @@ export interface Activity {
   date: string;
   notes?: string;
   createdAt: string;
+  // Optional enhancements
+  tags?: string[];
+  distanceKm?: number; // for running/cycling
+  calories?: number;   // computed from METs & weight
+  location?: { lat: number; lon: number };
+  weather?: { tempC: number; code: number };
+  airQualityPm25?: number; // µg/m3
 }

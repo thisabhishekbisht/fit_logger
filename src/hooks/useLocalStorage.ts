@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { Activity } from '../types/Activity';
+import { estimateCaloriesKcal } from '../utils/calories';
 
 const STORAGE_KEY = 'activities';
 
@@ -12,6 +13,7 @@ export const useLocalStorage = () => {
   const [activities, setActivities] = useState<Activity[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [lastDeleted, setLastDeleted] = useState<Activity | null>(null);
 
   // Load activities from localStorage
   const loadActivities = (): Activity[] => {
@@ -68,7 +70,37 @@ export const useLocalStorage = () => {
   };
 
   const deleteActivity = (id: string) => {
-    setActivities(prev => prev.filter(activity => activity.id !== id));
+    setActivities(prev => {
+      const toDelete = prev.find(a => a.id === id) || null;
+      setLastDeleted(toDelete);
+      return prev.filter(activity => activity.id !== id);
+    });
+  };
+
+  const undoDelete = () => {
+    if (!lastDeleted) return;
+    setActivities(prev => [lastDeleted, ...prev]);
+    setLastDeleted(null);
+  };
+
+  const editActivity = (id: string, updates: Partial<Activity>) => {
+    setActivities(prev => prev.map(a => (a.id === id ? { ...a, ...updates } : a)));
+  };
+
+  const exportJson = (): string => JSON.stringify(activities, null, 2);
+
+  const importJson = (json: string) => {
+    try {
+      const parsed = JSON.parse(json);
+      if (Array.isArray(parsed)) {
+        setActivities(parsed);
+        setError(null);
+      } else {
+        setError('Invalid import format');
+      }
+    } catch {
+      setError('Invalid JSON');
+    }
   };
 
   const clearError = () => setError(null);
@@ -77,8 +109,13 @@ export const useLocalStorage = () => {
     activities,
     isLoading,
     error,
+    lastDeleted,
     addActivity,
     deleteActivity,
+    undoDelete,
+    editActivity,
+    exportJson,
+    importJson,
     clearError,
   };
 };

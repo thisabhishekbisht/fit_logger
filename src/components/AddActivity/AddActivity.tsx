@@ -6,6 +6,8 @@ interface ActivityFormData {
   duration: number;
   date: string;
   notes: string;
+  tags: string;
+  distanceKm?: number;
 }
 
 interface Props {
@@ -19,6 +21,8 @@ const AddActivity: React.FC<Props> = ({ onAdd, isLoading = false }) => {
     duration: 0,
     date: new Date().toISOString().split('T')[0],
     notes: '',
+    tags: '',
+    distanceKm: undefined,
   });
   const [errors, setErrors] = useState<Partial<ActivityFormData>>({});
 
@@ -50,6 +54,11 @@ const AddActivity: React.FC<Props> = ({ onAdd, isLoading = false }) => {
         duration: formData.duration,
         date: formData.date,
         notes: formData.notes.trim() || undefined,
+        tags: formData.tags
+          .split(',')
+          .map(t => t.trim())
+          .filter(Boolean),
+        distanceKm: formData.distanceKm,
       });
       
       // Reset form
@@ -58,6 +67,8 @@ const AddActivity: React.FC<Props> = ({ onAdd, isLoading = false }) => {
         duration: 0,
         date: new Date().toISOString().split('T')[0],
         notes: '',
+        tags: '',
+        distanceKm: undefined,
       });
       setErrors({});
     }
@@ -113,12 +124,36 @@ const AddActivity: React.FC<Props> = ({ onAdd, isLoading = false }) => {
       </div>
 
       <div className={styles.inputGroup}>
+        <input
+          type="number"
+          placeholder="Distance (km, optional)"
+          value={formData.distanceKm ?? ''}
+          onChange={(e) => handleInputChange('distanceKm', e.target.value === '' ? undefined : Number(e.target.value))}
+          className={styles.input}
+          min="0"
+          step="0.01"
+          disabled={isLoading}
+        />
+      </div>
+
+      <div className={styles.inputGroup}>
         <textarea
           placeholder="Notes (optional)"
           value={formData.notes}
           onChange={(e) => handleInputChange('notes', e.target.value)}
           className={styles.textarea}
           rows={3}
+          disabled={isLoading}
+        />
+      </div>
+
+      <div className={styles.inputGroup}>
+        <input
+          type="text"
+          placeholder="Tags (comma separated)"
+          value={formData.tags}
+          onChange={(e) => handleInputChange('tags', e.target.value)}
+          className={styles.input}
           disabled={isLoading}
         />
       </div>
