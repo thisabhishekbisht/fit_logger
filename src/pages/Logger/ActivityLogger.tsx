@@ -1,126 +1,79 @@
-import React, { useEffect, useState } from 'react';
-import styles from './ActivityLogger.module.css'; // ⬅️ Import the CSS Module
-
-interface Activity {
-  type: string;
-  duration: number;
-  date: string;
-  notes?: string;
-}
+import React, { useEffect } from 'react';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
+import AddActivity from '../../components/AddActivity/AddActivity';
+import styles from './ActivityLogger.module.css';
 
 const ActivityLogger: React.FC = () => {
-      useEffect(() => {
-      document.title = 'Log Activity';
-    }, []);
-const [activities, setActivities] = useState<Activity[]>(() => {
-  const saved = localStorage.getItem('activities');
-  return saved ? JSON.parse(saved) : [];
-});
-
-  const [type, setType] = useState('');
-  const [duration, setDuration] = useState('');
-  const [date, setDate] = useState('');
-  const [notes, setNotes] = useState('');
-
-  // ✅ Load from localStorage on mount
   useEffect(() => {
-    const saved = localStorage.getItem('activities');
-    if (saved) {
-      setActivities(JSON.parse(saved));
-    }
+    document.title = 'Log Activity';
   }, []);
 
-  // ✅ Save to localStorage whenever activities change
-  useEffect(() => {
-    localStorage.setItem('activities', JSON.stringify(activities));
-  }, [activities]);
+  const { activities, isLoading, error, addActivity, deleteActivity, clearError } = useLocalStorage();
 
-  const handleAddActivity = () => {
-    if (!type || !duration || !date) return;
-
-    const newActivity: Activity = {
-      type,
-      duration: Number(duration),
-      date,
-      notes,
-    };
-
-    setActivities([newActivity, ...activities]);
-
-    // Clear form
-    setType('');
-    setDuration('');
-    setDate('');
-    setNotes('');
-  };
-
-  const handleDelete = (index: number) => {
-    const updated = activities.filter((_, i) => i !== index);
-    setActivities(updated);
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
   };
 
   return (
     <div className={styles.container}>
+      {/* Error Display */}
+      {error && (
+        <div className={styles.errorBanner}>
+          <span>{error}</span>
+          <button onClick={clearError} className={styles.errorClose}>
+            ×
+          </button>
+        </div>
+      )}
+
       {/* Form */}
       <div className={styles.formContainer}>
-        <h2 className={styles.heading}>Add Activity</h2>
-        <input
-          className={styles.input}
-          placeholder="Activity Type"
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-        />
-        <input
-          className={styles.input}
-          placeholder="Duration (mins)"
-          type="number"
-          value={duration}
-          onChange={(e) => setDuration(e.target.value)}
-        />
-        <input
-          className={styles.input}
-          type="date"
-          max={new Date().toISOString().split("T")[0]} // Restrict to today
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-        />
-
-        <textarea
-          className={styles.input}
-          style={{ height: '60px' }}
-          placeholder="Notes (optional)"
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-        />
-        <button className={styles.button} onClick={handleAddActivity}>
-          Log Activity
-        </button>
+        <AddActivity onAdd={addActivity} isLoading={isLoading} />
       </div>
 
-      {/* List */}
+      {/* Activity List */}
       <div className={styles.listContainer}>
         <h2 className={styles.heading}>Activity History</h2>
-        {activities.length === 0 ? (
+        
+        {isLoading ? (
+          <div className={styles.loadingCard}>
+            <p>Loading activities...</p>
+          </div>
+        ) : activities.length === 0 ? (
           <div className={styles.emptyCard}>
             <p className={styles.emptyText}>No activities logged yet.</p>
+            <p className={styles.emptySubtext}>Start by adding your first activity above!</p>
           </div>
         ) : (
-          activities.map((activity, index) => (
-            <div key={index} className={styles.activityCard}>
-              <strong>{activity.type}</strong> - {activity.duration} mins
-              <br />
-              {activity.notes && <em>Notes: {activity.notes}</em>}
-              <br />
-              <small>{activity.date}</small>
-              <br />
-              <button
-                className={styles.deleteButton}
-                onClick={() => handleDelete(index)}
-              >
-                Delete
-              </button>
-            </div>
-          ))
+          <div className={styles.activitiesGrid}>
+            {activities.map((activity) => (
+              <div key={activity.id} className={styles.activityCard}>
+                <div className={styles.activityHeader}>
+                  <h3 className={styles.activityType}>{activity.type}</h3>
+                  <span className={styles.duration}>{activity.duration} mins</span>
+                </div>
+                
+                {activity.notes && (
+                  <p className={styles.notes}>{activity.notes}</p>
+                )}
+                
+                <div className={styles.activityFooter}>
+                  <span className={styles.date}>{formatDate(activity.date)}</span>
+                  <button
+                    className={styles.deleteButton}
+                    onClick={() => deleteActivity(activity.id)}
+                    title="Delete activity"
+                  >
+                    🗑️
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </div>

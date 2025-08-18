@@ -5,10 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import styles from './Home.module.css';
 
 const Home: React.FC = () => {
-    useEffect(() => {
+  useEffect(() => {
     document.title = 'Fitness Tracker';
   }, []);
+  
   const navigate = useNavigate();
+  
   return (
     <div className={styles.container}>
       <motion.h1
@@ -28,6 +30,7 @@ const Home: React.FC = () => {
       >
         Track your daily fitness activities easily!
       </motion.p>
+      
       <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
