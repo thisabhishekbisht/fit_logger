@@ -21,6 +21,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenSettings }) => {
         <nav className={styles.nav} aria-label="Main">
           <Link className={`${styles.navLink} ${isActive('/') ? styles.active : ''}`} to="/">Home</Link>
           <Link className={`${styles.navLink} ${isActive('/log') ? styles.active : ''}`} to="/log">Log</Link>
+          <Link className={`${styles.navLink} ${isActive('/exercises') ? styles.active : ''}`} to="/exercises">Exercises</Link>
         </nav>
 
         <div className={styles.actions}>
