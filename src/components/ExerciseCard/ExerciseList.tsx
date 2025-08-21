@@ -29,12 +29,14 @@ export function ExerciseList() {
 
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 24 }}>
-      {(Array.isArray(data) ? data : []).map((exercise: Exercise) => (
-        <ExerciseCard
-          key={exercise.id}
-          exercise={{ ...exercise, imageUrl: images[exercise.id] }}
-        />
-      ))}
+      {(Array.isArray(data) ? data : [])
+        .filter((exercise: Exercise) => images[exercise.id])
+        .map((exercise: Exercise) => (
+          <ExerciseCard
+            key={exercise.id}
+            exercise={{ ...exercise, imageUrl: images[exercise.id] }}
+          />
+        ))}
     </div>
   );
 }
