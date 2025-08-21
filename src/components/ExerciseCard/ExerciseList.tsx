@@ -19,7 +19,6 @@ export function ExerciseList() {
         Object.entries(imgs).forEach(([id, url]) => {
           fixedImgs[Number(id)] = url.startsWith('http') ? url : `https:${url}`;
         });
-        console.log('Exercise images mapping:', fixedImgs);
         setImages(fixedImgs);
       });
     }
